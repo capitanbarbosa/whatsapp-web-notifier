@@ -2,6 +2,8 @@ import pickle
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
+import time
+
 
 # Set the path to the Microsoft Edge WebDriver executable
 edge_driver_path = 'msedgedriver.exe'
@@ -44,6 +46,41 @@ except Exception as e:
 # Once you're logged in, save the cookies for the next session
 pickle.dump(driver.get_cookies(), open("whatsapp_cookies.pkl", "wb"))
 
-# Keep the browser window open indefinitely
+
+# Define JavaScript functions to check unread messages
+js_code = """
+function checkUnreadMessages() {
+  const cellFrameContainers = document.querySelectorAll(
+    'div[data-testid="cell-frame-container"]'
+  );
+
+  var unreadMessages = [];
+
+  cellFrameContainers.forEach((container) => {
+    const unreadSpans = container.querySelectorAll(
+      'span[aria-label*="unread message"], span[aria-label*="unread messages"]'
+    );
+    const titleElement = container.querySelector(
+      'div[data-testid="cell-frame-title"] span'
+    );
+    const title = titleElement ? titleElement.textContent : "Unknown Title";
+
+    if (unreadSpans.length > 0) {
+      unreadSpans.forEach((span) => {
+        unreadMessages.push(`(${title}): ${span.textContent}`);
+      });
+    }
+  });
+
+  return unreadMessages;
+}
+
+return checkUnreadMessages();
+"""
+
 while True:
-    pass
+    # Execute the JavaScript code within the browser context and print the results
+    results = driver.execute_script(js_code)
+    for result in results:
+        print(result)
+    time.sleep(5)  # Wait for 5 seconds before checking again
