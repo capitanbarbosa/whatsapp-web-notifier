@@ -9,9 +9,21 @@ edge_driver_path = 'msedgedriver.exe'
 # Specify the path to your default profile directory
 profile_directory = 'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default'
 
+# Specify the paths to the extensions you want to enable
+extension_paths = [
+    # 'C:\\path\\to\\extension1',
+'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\jmjcgjmipjiklbnfbdclkdikplgajhgc\\1.5.24_0.crx'    # Add more extension paths if needed
+# 'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\jmjcgjmipjiklbnfbdclkdikplgajhgc\\1.5.24_0'
+]
+
 # Create a new Edge driver with your default profile
 edge_options = webdriver.EdgeOptions()
 edge_options.add_argument(f'--user-data-dir={profile_directory}')
+
+# Add the extension paths to the browser options
+for extension_path in extension_paths:
+    edge_options.add_extension(extension_path)
+
 driver = webdriver.Edge(service=Service(edge_driver_path), options=edge_options)
 
 # Navigate to WhatsApp Web
