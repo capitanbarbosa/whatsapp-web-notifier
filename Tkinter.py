@@ -6,7 +6,7 @@ from selenium.webdriver.edge.service import Service
 # Rest of the code...
 
 # Boolean variable to keep track of the visibility state of the list
-list_visible = True
+list_visible = False
 
 
 def update_display(results):
@@ -28,18 +28,24 @@ def toggle_list():
         for box in chat_boxes:
             box.pack_forget()  # Hide the chat boxes
         list_visible = False
+        # Reposition the window to the original coordinates
+        root.geometry(f"+{window_x}+{window_y}")
     else:
         for box in chat_boxes:
             box.pack(fill=tk.X, padx=10, pady=5)  # Show the chat boxes
         list_visible = True
+        # Reposition the window to the new coordinates
+        root.geometry("+1126+1248")
+
+
 
 
 # Set up the GUI
 root = tk.Tk()
 root.title("WhatsApp Unread Messages")
 
-# Remove the title bar and make the window transparent
-# root.overrideredirect(True)
+# -- Remove the title bar and make the window transparent
+root.overrideredirect(True)
 # root.attributes("-alpha", 0.8)
 
 # Set the window geometry to position it at the specified location
