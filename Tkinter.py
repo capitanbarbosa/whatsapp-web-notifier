@@ -23,6 +23,15 @@ def update_display(results):
 root = tk.Tk()
 root.title("WhatsApp Unread Messages")
 
+# Remove the title bar and make the window transparent
+root.overrideredirect(True)
+root.attributes("-alpha", 0.8)
+
+# Set the window geometry to position it at the specified location
+window_x = 1090
+window_y = 1405
+root.geometry(f"+{window_x}+{window_y}")
+
 # List to store the chat boxes
 chat_boxes = []
 
