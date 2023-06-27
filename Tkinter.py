@@ -1,9 +1,30 @@
 import pickle
+import tkinter as tk
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 import time
 
+
+def update_display(results):
+    # Clear the previous boxes
+    for box in chat_boxes:
+        box.destroy()
+    chat_boxes.clear()
+
+    # Create a box for each chat title
+    for result in results:
+        box = tk.Label(root, text=result, relief=tk.SOLID, borderwidth=1)
+        box.pack(fill=tk.X, padx=10, pady=5)
+        chat_boxes.append(box)
+
+
+# Set up the GUI
+root = tk.Tk()
+root.title("WhatsApp Unread Messages")
+
+# List to store the chat boxes
+chat_boxes = []
 
 # Set the path to the Microsoft Edge WebDriver executable
 edge_driver_path = 'msedgedriver.exe'
@@ -13,9 +34,7 @@ profile_directory = 'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Dat
 
 # Specify the paths to the extensions you want to enable
 extension_paths = [
-    # 'C:\\path\\to\\extension1',
-'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\jmjcgjmipjiklbnfbdclkdikplgajhgc\\1.5.24_0.crx'    # Add more extension paths if needed
-# 'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\jmjcgjmipjiklbnfbdclkdikplgajhgc\\1.5.24_0'
+    'C:\\Users\\luisd\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\jmjcgjmipjiklbnfbdclkdikplgajhgc\\1.5.24_0.crx'
 ]
 
 # Create a new Edge driver with your default profile
@@ -78,11 +97,15 @@ function checkUnreadMessages() {
 return checkUnreadMessages();
 """
 
-while True:
-    # Execute the JavaScript code within the browser context and print the results
+
+def check_messages():
     results = driver.execute_script(js_code)
-    for result in results:
-        print(result)
-    time.sleep(5)  # Wait for 5 seconds before checking again
+    update_display(results)
+    root.after(5000, check_messages)
 
 
+# Start checking messages
+check_messages()
+
+# Run the GUI event loop
+root.mainloop()
