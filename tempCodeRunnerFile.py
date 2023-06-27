@@ -2,11 +2,8 @@ import pickle
 import tkinter as tk
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
-
-# Rest of the code...
-
-# Boolean variable to keep track of the visibility state of the list
-list_visible = True
+from selenium.webdriver.common.by import By
+import time
 
 
 def update_display(results):
@@ -22,25 +19,13 @@ def update_display(results):
         chat_boxes.append(box)
 
 
-def toggle_list():
-    global list_visible
-    if list_visible:
-        for box in chat_boxes:
-            box.pack_forget()  # Hide the chat boxes
-        list_visible = False
-    else:
-        for box in chat_boxes:
-            box.pack(fill=tk.X, padx=10, pady=5)  # Show the chat boxes
-        list_visible = True
-
-
 # Set up the GUI
 root = tk.Tk()
 root.title("WhatsApp Unread Messages")
 
 # Remove the title bar and make the window transparent
-# root.overrideredirect(True)
-# root.attributes("-alpha", 0.8)
+root.overrideredirect(True)
+root.attributes("-alpha", 0.8)
 
 # Set the window geometry to position it at the specified location
 window_x = 1090
@@ -127,15 +112,6 @@ def check_messages():
     update_display(results)
     root.after(5000, check_messages)
 
-
-# Create a button to toggle the list visibility
-toggle_button = tk.Button(root, text="Toggle List", command=toggle_list)
-toggle_button.pack(pady=10)
-
-# Adjust initial display based on the initial state of list_visible
-if not list_visible:
-    for box in chat_boxes:
-        box.pack_forget()  # Hide the chat boxes initially
 
 # Start checking messages
 check_messages()
